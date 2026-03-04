@@ -1,40 +1,30 @@
-async function writeNote() {
-    const content = document.getElementById("noteInput").value;
+async function addHabit(){
+    const habit = document.getElementById("habitInput").value;
 
-    await fetch("/write", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content })
+    await fetch("/addHabit",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({habit})
     });
 
-    alert("Note written successfully");
+    alert("Habit added");
 }
 
-async function appendNote() {
-    const content = document.getElementById("noteInput").value;
-
-    await fetch("/append", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content })
-    });
-
-    alert("Note appended successfully");
-}
-
-async function readNote() {
-    const res = await fetch("/read");
+async function loadHabits(){
+    const res = await fetch("/getHabits");
     const data = await res.text();
+
     document.getElementById("output").innerText = data;
 }
 
-async function deleteNote() {
-    await fetch("/delete", { method: "DELETE" });
-    alert("File deleted");
+async function deleteHabits(){
+    await fetch("/deleteHabits",{method:"DELETE"});
+    alert("All habits deleted");
 }
 
-async function streamNote() {
-    const res = await fetch("/stream");
+async function streamHabits(){
+    const res = await fetch("/streamHabits");
     const data = await res.text();
+
     document.getElementById("output").innerText = data;
 }

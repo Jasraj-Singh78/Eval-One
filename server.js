@@ -1,6 +1,5 @@
 const express = require("express");
 const fs = require("fs");
-const path = require("path");
 
 const app = express();
 const PORT = 5000;
@@ -8,70 +7,48 @@ const PORT = 5000;
 app.use(express.json());
 app.use(express.static("public"));
 
-/* ==============================
-   1️⃣ Handling Request & Response
-============================== */
-
+/* HOME ROUTE */
 app.get("/", (req, res) => {
-    res.send("Server is running successfully!");
+    res.send("AI Habit Tracker Server Running");
 });
 
-app.post("/hello", (req, res) => {
-    const name = req.body.name;
-    res.json({ message: `Hello ${name}` });
-});
+/* ADD HABIT */
+app.post("/addHabit", (req, res) => {
+    const habit = req.body.habit + "\n";
 
-
-/* ==============================
-   2️⃣ File Module Operations
-============================== */
-
-// Write to file
-app.post("/write", (req, res) => {
-    const content = req.body.content;
-
-    fs.writeFile("data.txt", content, (err) => {
-        if (err) return res.status(500).send("Error writing file");
-        res.send("File written successfully");
+    fs.appendFile("habits.txt", habit, (err) => {
+        if (err) {
+            return res.status(500).send("Error saving habit");
+        }
+        res.send("Habit added successfully");
     });
 });
 
-// Read file
-app.get("/read", (req, res) => {
-    fs.readFile("data.txt", "utf8", (err, data) => {
-        if (err) return res.status(500).send("Error reading file");
+/* READ HABITS */
+app.get("/getHabits", (req, res) => {
+    fs.readFile("habits.txt", "utf8", (err, data) => {
+        if (err) {
+            return res.status(500).send("Error reading habits");
+        }
         res.send(data);
     });
 });
 
-// Append to file
-app.post("/append", (req, res) => {
-    const content = req.body.content;
-
-    fs.appendFile("data.txt", content, (err) => {
-        if (err) return res.status(500).send("Error appending file");
-        res.send("Content appended successfully");
+/* DELETE ALL HABITS */
+app.delete("/deleteHabits", (req, res) => {
+    fs.writeFile("habits.txt", "", (err) => {
+        if (err) {
+            return res.status(500).send("Error deleting habits");
+        }
+        res.send("All habits deleted");
     });
 });
 
-// Delete file
-app.delete("/delete", (req, res) => {
-    fs.unlink("data.txt", (err) => {
-        if (err) return res.status(500).send("Error deleting file");
-        res.send("File deleted successfully");
-    });
+/* STREAM HABITS */
+app.get("/streamHabits", (req, res) => {
+    const stream = fs.createReadStream("habits.txt", "utf8");
+    stream.pipe(res);
 });
-
-
-/* ==============================
-   3️⃣ File Streams
-============================== */
-
-app.get("/stream", (req, res) => {
-    const readStream = fs.createReadStream("data.txt", "utf8");
-    readStream.pipe(res);
-});
-
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

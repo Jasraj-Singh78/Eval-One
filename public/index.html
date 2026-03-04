@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Notes Manager</title>
+    <title>AI Habit Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>📘 Simple Notes Manager</h1>
+<div class="container">
+    <h1>AI Habit Tracker</h1>
 
-        <textarea id="noteInput" placeholder="Write your note here..."></textarea>
+    <input type="text" id="habitInput" placeholder="Enter a new habit">
 
-        <div class="buttons">
-            <button onclick="writeNote()">Write</button>
-            <button onclick="appendNote()">Append</button>
-            <button onclick="readNote()">Read</button>
-            <button onclick="deleteNote()">Delete</button>
-            <button onclick="streamNote()">Stream</button>
-        </div>
-
-        <div class="output" id="output"></div>
+    <div class="buttons">
+        <button onclick="addHabit()">Add Habit</button>
+        <button onclick="loadHabits()">View Habits</button>
+        <button onclick="deleteHabits()">Delete All</button>
+        <button onclick="streamHabits()">Stream Habits</button>
     </div>
 
-    <script src="script.js"></script>
+    <div id="output"></div>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
